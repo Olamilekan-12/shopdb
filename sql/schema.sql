@@ -1,0 +1,1 @@
+-- ShopDB schema, built step by step
