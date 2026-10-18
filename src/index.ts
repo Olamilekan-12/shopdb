@@ -1,7 +1,7 @@
 import express from "express"
 import dotenv from "dotenv"
 import {pool} from "./db.js"
-import { getAllUsers } from "./users.queries.js"
+import { getAllUsers, getUserById } from "./users.queries.js"
 
 dotenv.config()
 
@@ -36,6 +36,23 @@ app.get("/users", async(_req, res) => {
         })
     }
    
+})
+
+app.get("/users/:id", async(req, res)=> {
+    try {
+        const user = await getUserById(req.params.id)
+        if(!user){
+            return res.status(404).json({
+                message : "User not found"
+            })
+        }
+        res.status(200).json(user)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message : "Failed to fetch users"
+        })
+    }
 })
 
 app.listen(PORT,()=> {
