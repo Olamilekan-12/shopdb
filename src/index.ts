@@ -1,6 +1,7 @@
 import express from "express"
 import dotenv from "dotenv"
 import {pool} from "./db.js"
+import { getAllUsers } from "./users.queries.js"
 
 dotenv.config()
 
@@ -22,6 +23,19 @@ app.get("/health", async(_req, res)=> {
             message : "Database unreachable"
         })
     }
+})
+
+app.get("/users", async(_req, res) => {
+    try {
+        const users = await getAllUsers()
+        res.json(users)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message : "Failed to fetch users"
+        })
+    }
+   
 })
 
 app.listen(PORT,()=> {
